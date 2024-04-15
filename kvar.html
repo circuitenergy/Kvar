@@ -1,1 +1,347 @@
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-image: url('ce.svg'); 
+        background-size: 60%; /* Adjust size: 'cover' will cover the entire body */
+        background-position: center bottom 10%; /* Adjust position: 'center top' centers it horizontally and aligns it to the top */
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-color: rgba(255, 255, 255, 0.6); /* 40% transparent white background */
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+    .result-line {
+        /* font-size: 24px; */
+        font-weight: bold;
+        font-family: "Lato, Open Sans, Roboto, Helvetica Neue, Arial, sans-serif";
+        color: #0077b6; 
+        margin: 10px 0;
+        }
 
+        .cf-input {
+            display: inline-block;
+            margin-right: 20px;
+        }
+    .result2-line {
+        /* font-size: 24px; */
+        font-weight: bold;
+        font-family: "Lato, Open Sans, Roboto, Helvetica Neue, Arial, sans-serif";
+        color: #ff0000;
+        /* margin-top: 5px; */
+        padding: 10px;
+    }
+    #container {
+        display: inline-block;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #edf5fec2;
+        border-radius: 40px;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+        min-width: 500px; /* Set your desired minimum width */
+        min-height: 200px; /* Set your desired minimum height */
+    }
+
+    h1 {
+        color: #333;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    .input-group label {
+        display: block;
+        font-size: 18px;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 18px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 10px;
+    }
+
+    button:hover {
+        background-color: #555;
+    }
+</style>
+<link href="https://fonts.googleapis.com/css?family=Proza+Sans&display=swap" rel="stylesheet">
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kVAR Calculator</title>
+    <link rel="icon" href="ce.svg"image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+    <div id="container">
+        <div id="page1">
+            <h1>Welcome to the Circuit Energy Power Conditioning Calculator</h1>
+            <button id="startButton">Start</button>
+        </div>
+        <div id="page2" style="display: none;">
+            <h2>Enter Your Plant Information</h2>
+            <div class="input-group cf-input">
+                <label for="pf">Current Power Factor (%):</label>
+                <input type="number" id="pf" placeholder="Current Power Factor (%)" style="font-size: 12px;">
+            </div>
+            <div class="input-group cf-input">
+                <label for="pfd">Desired Power Factor (%):</label>
+                <input type="number" id="pfd" placeholder="Desired Power Factor (%)" style="font-size: 12px;" >
+            </div>
+            <div class="input-group">
+                <label for="voltage">Voltage level:</label>
+                <select id="voltage">
+                    <option value="480">480 V</option>
+                    <option value="600">600 V</option>
+                </select>
+            </div>
+            <div style="margin-top: 20px;"></div>
+
+            <div class="input-group">
+                <label for="selectedOption">Consumption:</label>
+                <select id="selectedOption">
+                    <option value="demand">Total Demand (KW)</option>
+                    <option value="current">Total Current (A) </option>
+                </select>
+            </div>
+            <div class="input-group">
+                <input type="number" id="p" placeholder="Total Consumption" >
+            </div>
+            <button id="backButton1">Back</button>
+            <button id="calculateButton">Next</button>
+        </div>
+        <div id="page3" style="display: none;">
+            <h2>Calculation Result</h2>
+            <p id="resultQ" class="result-line"> </p>
+            <p id="resultS" class="result-line"> </p>
+            <p id="resultC" class="result-line"> </p> 
+            <div id="visual"></div>
+            <button id="backButton2">Back</button>
+            <button id="harmonicButton">How about Harmonics!</button>
+        </div>
+        <div id="page4" style="display: none; padding: 20px; background-color: #f7f7f7; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+            <h2 style="font-family: 'Arial', sans-serif; color: #333;">Select Reactor Type</h2>
+            <div style="text-align: left;">
+                <div style="margin: 10px 0;">
+                    <input type="radio" id="reactor1" name="reactor" value="14%" style="margin-right: 10px;">
+                    <label for="reactor3" style="font-family: 'Arial', sans-serif; font-size: 16px; color: #444;">Detuned Order n = 2.7</label>
+                    <span style="margin-left: 8px; font-family: 'Arial', sans-serif; font-size: 14px; color: #666;">(If you have more of triplen harmonics)</span>
+                </div>
+                <div style="margin: 10px 0;">
+                    <input type="radio" id="reactor2" name="reactor" value="7%" style="margin-right: 10px;">
+                    <label for="reactor2" style="font-family: 'Arial', sans-serif; font-size: 16px; color: #444;">Detuned Order n = 3.8</label>
+                    <span style="margin-left: 8px; font-family: 'Arial', sans-serif; font-size: 14px; color: #666;">(If you have VFD)</span>
+                </div>
+                <div style="margin: 10px 0;">
+                    <input type="radio" id="reactor3" name="reactor" value="5.67%" style="margin-right: 10px;" checked>
+                    <label for="reactor1" style="font-family: 'Arial', sans-serif; font-size: 16px; color: #444;">Detuned Order n = 4.2</label>
+                    <span style="margin-left: 8px; font-family: 'Arial', sans-serif; font-size: 14px; color: #666;">(If you have VFD, also highly recommended for avoiding resonance)</span>
+                </div>
+            </div>
+        
+            <button id="backButton3">Back</button>
+            <button id="detailsButton">Input Details</button>
+        </div> 
+        <div id="page5" style="display: none;">
+            
+            <h2>Input Monthly Bill Data (Ontario)</h2>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <table style="width: 80%;">
+                    <tr>
+                        <th style="width: 8%;">Month</th>
+                        <th style="width: 6%;">Demand (kW)</th>
+                        <th style="width: 6%;">Existing PF (%)</th>
+                        <th style="width: 6%;">Desired PF (%)</th>
+                        <th style="width: 6%;">Adjusted Consumption (kWH)</th>
+                        <th style="width: 2%;">Consumption Charge (k$)</th>
+                        <th style="width: 8%;">Global Adjustment Charge (k$)</th>
+                        <th style="width: 8%;">Delivery Variable Charge (k$)</th>
+                        <th style="width: 8%;">Regulatory Variable Charge (k$)</th>
+                    </tr>
+                    <tr>
+                        <td>January</td>
+                        <td><input type="number" id="januaryKW" style="width: 100px;"></td>
+                        <td><input type="number" id="januaryPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="januaryPFD" style="width: 100px;"></td>
+                        <td><input type="number" id="januaryKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="januaryKWHCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="januaryGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="januaryDeliveryCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="januaryRegulatoryCharge" style="width: 100px;"></td>
+                        <td>
+                            <button class="copyButton smallButton" data-month="january">
+                                <span style="width: 110px; height: 42px;font-size: 12px; display: inline-block; vertical-align: middle;">Too Hard to Enter All Months Data? OK! Copy to All</span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>February</td>
+                        <td><input type="number" id="februaryKW" style="width: 100px;"></td>
+                        <td><input type="number" id="februaryPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="februaryPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="februaryKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="februaryKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="februaryGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="februaryDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="februaryRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>March</td>
+                        <td><input type="number" id="marchKW" style="width: 100px;"></td>
+                        <td><input type="number" id="marchPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="marchPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="marchKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="marchKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="marchGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="marchDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="marchRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>April</td>
+                        <td><input type="number" id="aprilKW" style="width: 100px;"></td>
+                        <td><input type="number" id="aprilPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="aprilPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="aprilKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="aprilKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="aprilGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="aprilDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="aprilRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>May</td>
+                        <td><input type="number" id="mayKW" style="width: 100px;"></td>
+                        <td><input type="number" id="mayPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="mayPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="mayKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="mayKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="mayGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="mayDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="mayRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>June</td>
+                        <td><input type="number" id="juneKW" style="width: 100px;"></td>
+                        <td><input type="number" id="junePF"  style="width: 100px;"></td>
+                        <td><input type="number" id="junePFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="juneKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="juneKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="juneGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="juneDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="juneRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>July</td>
+                        <td><input type="number" id="julyKW" style="width: 100px;"></td>
+                        <td><input type="number" id="julyPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="julyPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="julyKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="julyKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="julyGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="julyDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="julyRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>August</td>
+                        <td><input type="number" id="augustKW" style="width: 100px;"></td>
+                        <td><input type="number" id="augustPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="augustPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="augustKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="augustKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="augustGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="augustDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="augustRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>September</td>
+                        <td><input type="number" id="septemberKW" style="width: 100px;"></td>
+                        <td><input type="number" id="septemberPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="septemberPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="septemberKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="septemberKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="septemberGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="septemberDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="septemberRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>October</td>
+                        <td><input type="number" id="octoberKW" style="width: 100px;"></td>
+                        <td><input type="number" id="octoberPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="octoberPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="octoberKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="octoberKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="octoberGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="octoberDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="octoberRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>November</td>
+                        <td><input type="number" id="novemberKW" style="width: 100px;"></td>
+                        <td><input type="number" id="novemberPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="novemberPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="novemberKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="novemberKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="novemberGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="novemberDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="novemberRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>December</td>
+                        <td><input type="number" id="decemberKW" style="width: 100px;"></td>
+                        <td><input type="number" id="decemberPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="decemberPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="decemberKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="decemberKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="decemberGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="decemberDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="decemberRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+
+                </table>    
+                <div id="sums">
+                    <p id="sumsurchargeSavings" style="margin-bottom: 1px; font-family: Arial, sans-serif; font-size: 18px; color: #0077b6"></p>
+                    <p id="sumKwSavings" style="margin-bottom: 1px; font-family: Arial, sans-serif; font-size: 18px; color: #0077b6"></p>
+                    <p id="sumKwhSavings" style="margin-bottom: 1px; font-family: Montserrat, sans-serif; font-size: 18px; color: #0077b6"></p>
+                    <p id="sumGASavings" style="margin-bottom: 1px; font-family: Montserrat, sans-serif; font-size: 18px; color: #0077b6"></p>
+                    <p id="sumRegSavings" style="margin-bottom: 5px; font-family: Montserrat, sans-serif; font-size: 18px; color: #0077b6"></p>
+                    <p id="totalSavings" style="margin-bottom: 5px; font-family: Montserrat, sans-serif; font-size: 22px; color: #fc0000"></p>
+                </div>          
+                <div id="buttonContainer" style="display: flex; justify-content: space-between; margin-top: 20px;">
+                    <button id="backButton4">Back</button>
+                    <button id="clearButton">Clear Inputs</button>
+                    <button id="showsaving">Show Savings!</button>
+                    <button id="startagain">Start Again</button>
+                    <button id="sendinfo">Send Your Information to Our Exprets</button>
+                </div>               
+                    
+            </div>
+            <canvas id="myChart" width="10" height="4"></canvas>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+<script>
+function t(){const JC=['selectedIndex','pfd','20QQVEoz','june','The\x20net\x20capacitance\x20is\x20','getContext','Annual\x20KWH\x20Savings:\x20$','reduce','januaryKWH','data','block','december','sumKwhSavings','page2','rgba(75,\x20192,\x20192,\x201)','Accumulated\x20Savings\x20Considering\x202.5%\x20Annual\x20Inflation\x20Rate','label','kwhSaving:','querySelectorAll','page5','august','sums','YJHmB','The\x20needed\x20Reactive\x20Power\x20amount\x20is\x20','voltage','rMsBy','ZQhMB','page4','neededQ:','click','input[type=\x27number\x27]','DeliveryCharge','resultC','calculateButton','july','januaryGlobalAdjCharge','15px','september','We\x20can\x20offer\x20you\x20','6152qkxZmy','RegulatoryCharge','clearButton','Annual\x20KW\x20Savings:\x20$','surcharge:','addEventListener','Year\x204','sumsurchargeSavings','20px','value','none','5nEHvVs','Year\x205','Total\x20Annual\x20Savings:\x20$','round','cos','trunc','kwSaving:','Annual\x20Surcharge\x20Savings:\x20$','Year\x202','page3','k\x20*','sumRegSavings','6227898XAjZBL','october','borderWidth','Year\x201','KWH','detailsButton','april','110223oDjupw','current','harmonicButton','601275HSzXBS','atan','update','getElementById','lrc:','style','january','textContent','KWHCharge','february','januaryPF','fontSize','may','values','IpCDL','forEach','datasets','log','10161OYXnDV','20649790SJkfkr','QwHdk','GASaving:','Annual\x20GA\x20Savings:\x20$','tan','januaryPFD','rUlwt','januaryKW','display','options','beginAtZero','sumKwSavings','selectedOption','11xWiQcd','quote:','backgroundColor','startButton','1791128rSrFwh','scales','5974451PtPvky','max','\x20stages\x20of\x2075\x20KVAR','sumGASavings','november','\x20uF\x20per\x20Phase\x20(Delta)','showsaving','backButton3','LDaez','march','PFD','januaryRegulatoryCharge','labels','25px','totalSavings','borderColor','ceil','startagain','januaryDeliveryCharge','acos'];t=function(){return JC;};return t();}function J(D,I){const Y=t();return J=function(e,g){e=e-(-0x1573*-0x1+-0x1dd1+0x917);let Q=Y[e];return Q;},J(D,I);}(function(D,I){const J1=J,Y=D();while(!![]){try{const e=-parseInt(J1(0xc8))/(0x4*0xa+0xc29+-0x8*0x18a)+parseInt(J1(0xef))/(-0xdc2*-0x1+0x58a+0x337*-0x6)+parseInt(J1(0xcb))/(0xfcb*0x2+-0x447*0x3+-0x12be)*(parseInt(J1(0x107))/(0x66e*-0x2+0x228b*-0x1+0xc7*0x3d))+parseInt(J1(0x137))/(0x270b+0x119d+-0x1b*0x219)*(parseInt(J1(0xc1))/(0x1*0x213+0x12bb*-0x1+0xe*0x131))+-parseInt(J1(0xf1))/(-0x1e3d+-0x1ec3+0x397*0x11)+-parseInt(J1(0x12c))/(0x878+-0x6*0x4a3+0x3*0x676)*(-parseInt(J1(0xdd))/(-0x1*-0x1043+0x1c2f+-0x2c69*0x1))+-parseInt(J1(0xde))/(0x1*-0x1e88+0x48b+0x1a07)*(parseInt(J1(0xeb))/(0x2636+0x26d3+-0x267f*0x2));if(e===I)break;else Y['push'](Y['shift']());}catch(g){Y['push'](Y['shift']());}}}(t,0xa04e5+-0x158bbc+0x175ae1),document['addEventListener']('DOMContentLoaded',function(){const J2=J,n=document[J2(0xce)](J2(0xee)),x=document[J2(0xce)](J2(0x126)),k=document[J2(0xce)]('backButton1'),s=document[J2(0xce)]('backButton2'),C=document[J2(0xce)](J2(0xf8)),o=document[J2(0xce)]('backButton4'),F=document['getElementById'](J2(0x102)),u=document[J2(0xce)](J2(0xf7)),H=document['getElementById'](J2(0xca)),p=document[J2(0xce)](J2(0xc6)),O=document[J2(0xce)](J2(0x12e)),W=document[J2(0xce)]('page1'),L=document['getElementById'](J2(0x112)),r=document[J2(0xce)](J2(0xbe)),a=document[J2(0xce)](J2(0x120)),b=document['getElementById'](J2(0x118)),A=document['getElementById']('resultQ'),q=document[J2(0xce)](J2(0x125)),K=document[J2(0xce)]('resultS'),z=-0x1df3*0x1+-0x26cd+0x44c0+0.06,P=-0x210e+-0x163c+0x2e9*0x13+0.02499999999999991,T=['february',J2(0xfa),J2(0xc7),J2(0xd7),J2(0x108),J2(0x127),J2(0x119),J2(0x12a),J2(0xc2),J2(0xf5),J2(0x110)],y=[J2(0xd1),J2(0xd4),J2(0xfa),J2(0xc7),J2(0xd7),'june','july',J2(0x119),J2(0x12a),'october',J2(0xf5),J2(0x110)];n['addEventListener'](J2(0x122),function(){const J3=J2;W[J3(0xd0)][J3(0xe6)]='none',L['style']['display']=J3(0x10f);}),k['addEventListener'](J2(0x122),function(){const J4=J2;J4(0xdf)===J4(0xdf)?(L[J4(0xd0)][J4(0xe6)]='none',W[J4(0xd0)][J4(0xe6)]='block'):(G[J4(0xd0)]['display']=J4(0x136),f[J4(0xd0)][J4(0xe6)]='block');}),s[J2(0x131)](J2(0x122),function(){const J5=J2;r[J5(0xd0)][J5(0xe6)]=J5(0x136),L['style'][J5(0xe6)]=J5(0x10f);}),C[J2(0x131)]('click',function(){const J6=J2;J6(0x11b)===J6(0xf9)?h=(0x1b88+-0xca*0xc+-0x11b6)*S*((-0x15b2+0xe5e*0x2+-0x709)/n-(0x28*0xa7+0x2*-0x41+-0x1995)/x):(a[J6(0xd0)][J6(0xe6)]=J6(0x136),r[J6(0xd0)][J6(0xe6)]=J6(0x10f));}),o[J2(0x131)]('click',function(){const J7=J2;b['style']['display']=J7(0x136),a[J7(0xd0)][J7(0xe6)]=J7(0x10f);}),F[J2(0x131)](J2(0x122),function(){const J8=J2;'XISXM'==='XISXM'?(b[J8(0xd0)]['display']=J8(0x136),W['style'][J8(0xe6)]='block',document['getElementById'](J8(0x11a))[J8(0xd0)][J8(0xe6)]=J8(0x136)):(f[J8(0x10e)][J8(0xdb)][-0xf5a+-0x2d*-0x71+-0x483][J8(0x10e)]=h,S[J8(0xcd)]());}),x[J2(0x131)](J2(0x122),function(){const J9=J2,M=document[J9(0xce)](J9(0x11d)),X=parseInt(M[J9(0x135)],0x233d+-0x266*-0xd+-0x4261*0x1),E=document[J9(0xce)](J9(0xea)),R=E['options'][E[J9(0x105)]]['value'];let Z=parseFloat(document[J9(0xce)]('p')[J9(0x135)]);R==J9(0xc9)&&(Z=Z*X*(-0x11*0x203+-0xc51*0x2+0x1*0x3ad6+0.732)/(-0x7f*0x1+0x23c9+-0x1f62));const N=parseFloat(document[J9(0xce)]('pf')[J9(0x135)]),V=parseFloat(document['getElementById'](J9(0x106))[J9(0x135)]),d=document[J9(0xce)](J9(0xe5));d[J9(0x135)]=Math['trunc'](Z);const t0=document[J9(0xce)](J9(0xd5));t0[J9(0x135)]=N;const t1=document['getElementById'](J9(0xe3));t1['value']=V;if(isNaN(Z)||isNaN(N)||isNaN(V)||N<=0x1fbf+0x139d+-0x335c||N>-0x3bc+-0xba9*0x1+0x1*0xfc9||V<=0x29f*0x6+0x140a+-0x23c4||V>-0x2*-0x35f+0xfa5+-0x15ff||Z<=0xcc+-0x1ec2+0x76*0x41||Z>-0x17314+-0x1*0x9b8d+0x39541||N>V){alert('Invalid\x20input.\x20Please\x20enter\x20values\x20within\x20the\x20specified\x20range.');return;}const t2=Math[J9(0xba)](Z*(Math['tan'](Math[J9(0x104)](N/(0xc39+0x1ddb+-0x29b0)))-Math['tan'](Math['acos'](V/(0xda*-0xf+-0xb66+0x30*0x83)))));A[J9(0xd2)]=J9(0x11c)+t2+'\x20(kVAR)',A['style'][J9(0xd6)]=J9(0x134);const t3=Math[J9(0x101)](t2/(0x261e+-0x1bef+-0x9e4));K['textContent']=J9(0x12b)+t3+J9(0xf3),K[J9(0xd0)]['fontSize']=J9(0xfe);const t4=Math[J9(0xba)]((0x1eb5*0x298c2+-0x5b401a2+-0xe6df188)*t3*(0x749*0x1+-0xefb+0x7fd)/((0x5*-0x17f+-0x4*0x896+0x33*0xd2)*X*X*(-0x4*0x4ff+-0x21d9+0x35d7)*(0x1181*0x1+0x3e7+-0x1565+0.14159200000000016)*(-0xb15*0x3+-0x21*-0x77+0x1*0x1224)));q[J9(0xd2)]=J9(0x109)+t4+J9(0xf6),q['style']['fontSize']=J9(0x129),L[J9(0xd0)]['display']=J9(0x136),r[J9(0xd0)]['display']=J9(0x10f);}),H[J2(0x131)](J2(0x122),function(){const Jt=J2;r[Jt(0xd0)][Jt(0xe6)]=Jt(0x136),a[Jt(0xd0)]['display']=Jt(0x10f);}),p[J2(0x131)](J2(0x122),function(){const JJ=J2;a[JJ(0xd0)][JJ(0xe6)]=JJ(0x136),b['style'][JJ(0xe6)]=JJ(0x10f);const M=document[JJ(0xce)](JJ(0xe3))[JJ(0x135)];T[JJ(0xda)](function(X){const JD=JJ;document[JD(0xce)](X+JD(0xfb))[JD(0x135)]=M;});});function j(){const JI=J2;if(JI(0xd9)==='sdyPR')G[JI(0xd0)][JI(0xe6)]=JI(0x136),f['style'][JI(0xe6)]='block';else{const X=document['querySelectorAll'](JI(0x123));X['forEach'](E=>{const JY=JI;JY(0xe4)!==JY(0xe4)?i[JY(0x135)]='':E[JY(0x135)]='';});}}O['addEventListener'](J2(0x122),function(){j();});const w=document['querySelector']('.copyButton');w['addEventListener'](J2(0x122),function(){const Je=J2,M=document[Je(0xce)](Je(0xe5))['value'],X=document['getElementById'](Je(0xd5))[Je(0x135)],E=document[Je(0xce)](Je(0xe3))['value'],R=document[Je(0xce)](Je(0x10d))[Je(0x135)],Z=document[Je(0xce)]('januaryKWHCharge')[Je(0x135)],c=document['getElementById'](Je(0x128))['value'],N=document['getElementById'](Je(0x103))[Je(0x135)],V=document[Je(0xce)](Je(0xfc))['value'];T[Je(0xda)](function(d){const Jg=Je;document[Jg(0xce)](d+'KW')[Jg(0x135)]=M,document[Jg(0xce)](d+'PF')['value']=X,document[Jg(0xce)](d+Jg(0xfb))['value']=E,document['getElementById'](d+Jg(0xc5))[Jg(0x135)]=R,document[Jg(0xce)](d+Jg(0xd3))[Jg(0x135)]=Z,document['getElementById'](d+'GlobalAdjCharge')[Jg(0x135)]=c,document[Jg(0xce)](d+'DeliveryCharge')[Jg(0x135)]=N,document['getElementById'](d+Jg(0x12d))[Jg(0x135)]=V;});}),u[J2(0x131)]('click',function(){const JQ=J2,M={},X={},E={},R={},Z={},c={};y[JQ(0xda)](function(t5){const Jn=JQ;if(Jn(0x11e)!=='rMsBy'){const t7=i[Jn(0x117)](Jn(0x123));t7[Jn(0xda)](t8=>{const Jx=Jn;t8[Jx(0x135)]='';});}else{const t7=parseFloat(document[Jn(0xce)](t5+'KW')[Jn(0x135)]),t8=parseFloat(document['getElementById'](t5+'PF')[Jn(0x135)]),t9=parseFloat(document[Jn(0xce)](t5+Jn(0xfb))['value']),tt=Math['trunc'](t7*(Math[Jn(0xe2)](Math[Jn(0x104)](t8/(0x483*0x4+0x409*-0x7+0xa97)))-Math['tan'](Math[Jn(0x104)](t9/(-0x20aa+-0x92f*0x2+0x336c*0x1)))));console[Jn(0xdc)](Jn(0x121),tt),M[t5]=tt;}});const N=Math[JQ(0xf2)](...Object['values'](M));console[JQ(0xdc)]('maxQ:',N);const V=Math[JQ(0x101)](N/(0xaf9*0x1+-0x15d*-0x19+-0x1*0x2cc3))*(0xf57*0x1+0x77c*0x3+-0x2580);console['log'](JQ(0xec),V),y['forEach'](function(t5){const Jk=JQ;if(Jk(0x11f)!=='iquiv'){const t6=parseFloat(document[Jk(0xce)](t5+'KW')[Jk(0x135)]),t7=parseFloat(document[Jk(0xce)](t5+'PF')[Jk(0x135)]),t8=parseFloat(document[Jk(0xce)](t5+Jk(0xd3))[Jk(0x135)]),t9=parseFloat(document['getElementById'](t5+'GlobalAdjCharge')[Jk(0x135)]),tt=parseFloat(document[Jk(0xce)](t5+Jk(0x124))['value']),tJ=parseFloat(document[Jk(0xce)](t5+'RegulatoryCharge')[Jk(0x135)]),tD=Math[Jk(0xb9)](Math[Jk(0xcc)]((t6*Math['tan'](Math[Jk(0x104)](t7/(0x1*-0x1f2c+-0x7c5+-0x1*-0x2755)))-V)/t6))*(-0x11dc+-0x10e3+-0x707*-0x5);console[Jk(0xdc)]('predicted:',tD);const tI=0xa5*0x3b+-0x18a2+-0xd64-(t7/tD)**(-0xb*0x36f+0x17a1+0x713*0x2);console[Jk(0xdc)](Jk(0xcf),tI);const tY=z*tI*tt;console[Jk(0xdc)](Jk(0xbb),tY);if(t7>=-0x1d*0xad+0x1b7*-0xf+0x9e*0x4a)surchargeSaving=-0x1*-0x12e6+-0x3*0xfc+0x13a*-0xd;else tD<-0x19d1+0x1787+0x2a4?surchargeSaving=(0xdd*0x21+-0x1405+-0x40f*0x2)*tt*((-0x1340+-0x1c83+-0x17e2*-0x2)/t7-(-0x2*-0x97a+-0x5*0x502+0x617)/tD):surchargeSaving=((0x1643*0x1+0x3cb*0x4+0x2515*-0x1)/t7-(0x2*-0x5f7+-0x2*0xd8d+0x2709))*tt;console['log'](Jk(0x130),surchargeSaving);const te=z*tI*t8,tg=z*tI*t9,tQ=z*tI*tJ;console[Jk(0xdc)](Jk(0x116),te),console['log'](Jk(0xe0),tg),console['log']('RegSaving:',tQ),c[t5]=surchargeSaving,X[t5]=tY,E[t5]=te,R[t5]=tg,Z[t5]=tQ;}else i();});const d=Object[JQ(0xd8)](c)[JQ(0x10c)]((t5,t6)=>t5+t6,0xbf9*0x2+0x19cb+-0x31bd),t0=Object['values'](X)[JQ(0x10c)]((t5,t6)=>t5+t6,0x124d+0x103f+-0x3*0xb84),t1=Object[JQ(0xd8)](E)[JQ(0x10c)]((t5,t6)=>t5+t6,-0x269e+-0xe2d+0xff*0x35),t2=Object[JQ(0xd8)](R)[JQ(0x10c)]((t5,t6)=>t5+t6,0x1c99+-0x203*0xd+-0x139*0x2),t3=Object['values'](Z)[JQ(0x10c)]((t5,t6)=>t5+t6,0x1e84+0x1a84+0x721*-0x8);document['getElementById'](JQ(0x11a))[JQ(0xd0)][JQ(0xe6)]=JQ(0x10f),document[JQ(0xce)](JQ(0x133))[JQ(0xd2)]=JQ(0xbc)+Math['round'](d*(-0x1*0x832+0x1*-0x22c+0xa68))/(-0x158a+0x122e+0x366)+'k',document['getElementById'](JQ(0xe9))['textContent']=JQ(0x12f)+Math['round'](t0*(-0x2e*0x3b+-0x31d+0xdc1))/(-0x107a+0x235e*0x1+0xfe*-0x13)+'k',document[JQ(0xce)](JQ(0x111))[JQ(0xd2)]=JQ(0x10b)+Math['round'](t1*(-0x161*-0xc+0x2302*0x1+-0x3384))/(-0x1b53+0x206c+-0x50f)+'k',document[JQ(0xce)](JQ(0xf4))['textContent']=JQ(0xe1)+Math['round'](t2*(-0x163*0x19+-0x1*0x1fd9+0x428e*0x1))/(-0x1*-0x4cc+-0x9b9+-0x1f*-0x29)+JQ(0xbf),document[JQ(0xce)](JQ(0xc0))[JQ(0xd2)]='Annual\x20Reg\x20Savings:\x20$'+Math[JQ(0x13a)](t3*(0x1ae6+0x192a*0x1+-0x3406))/(0x311*0x3+-0x14e6+0x259*0x5)+'k';const t4=d+t0+t1+t2+t3;document['getElementById'](JQ(0xff))[JQ(0xd2)]=JQ(0x139)+Math[JQ(0x13a)](t4*(-0x20ed+-0x49a+0x2591))/(-0x1f82+-0x11*0x39+0x2355)+'k',B(t4);});function l(M){const Js=J2;U[Js(0x10e)][Js(0xdb)][0x19*0x120+0x102*0x1f+-0x11*0x37e]['data']=M,U[Js(0xcd)]();}function B(M){const X=[M,M*(0x1e36+0x4*-0x2d8+-0x12d4)*P**(0x25b3*-0x1+0x9fb*-0x3+0x43a5),M*(-0x1*0x1ce1+-0x3*-0xa13+-0x155)*P**(0xc9c+-0x15ba+0x8*0x124),M*(0x262c+0x2ba+-0x28e2)*P**(0x171d*-0x1+0x976+0xdaa),M*(0x1726+0x545*0x1+0xa*-0x2d7)*P**(-0x23ed*0x1+0xcbb*-0x1+0x46*0xb2)];l(X);}const m=document[J2(0xce)]('myChart')[J2(0x10a)]('2d'),v={};v[J2(0x115)]=J2(0x114),v[J2(0x10e)]=[-0x15ae+-0xe5a+0x2408,0x1158+-0xe0*-0x11+0x80e*-0x4,0x37d*0x2+-0x1872*-0x1+-0x1f6c,-0x1525*-0x1+0x1*0x201a+-0x353f,-0xbe9+0xc56+-0x6d],v[J2(0xed)]='rgba(75,\x20192,\x20192,\x200.2)',v[J2(0x100)]=J2(0x113),v[J2(0xc3)]=0x1;const i={};i[J2(0xfd)]=[J2(0xc4),J2(0xbd),'Year\x203',J2(0x132),J2(0x138)],i[J2(0xdb)]=[v];const G={};G[J2(0xe8)]=!![];const f={};f['y']=G;const h={};h[J2(0xf0)]=f;const S={};S['type']='bar',S[J2(0x10e)]=i,S[J2(0xe7)]=h;const U=new Chart(m,S);}));
+</script>
