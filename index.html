@@ -23,14 +23,33 @@
             display: inline-block;
             margin-right: 20px;
         }
-    .result2-line {
-        /* font-size: 24px; */
-        font-weight: bold;
-        font-family: "Lato, Open Sans, Roboto, Helvetica Neue, Arial, sans-serif";
-        color: #ff0000;
-        /* margin-top: 5px; */
-        padding: 10px;
+    #sumsContainer {
+        display: block;
+        background-color: rgba(249, 249, 249, 0);
+        padding: 20px;
+        margin-top: 20px;
+        /* border: 2px solid #ccc; */
+        border-radius: 20px;
     }
+
+    #sumsContainer p {
+        margin-bottom: 5px;
+        font-family: Montserrat, sans-serif;
+        font-size: 18px;
+        color: #0077b6;
+        text-align: justify; /* Align lines */
+    }
+    .note {
+    font-style: italic;
+    font-size: 14px !important;
+    color: #555 !important;
+}
+
+    #sumsContainer #totalSavings {
+        font-size: 22px;
+        color: #fc0000;
+    }
+
     #container {
         display: inline-block;
         margin: 0 auto;
@@ -41,7 +60,6 @@
         min-width: 500px; /* Set your desired minimum width */
         min-height: 200px; /* Set your desired minimum height */
     }
-
     h1 {
         color: #333;
     }
@@ -90,7 +108,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>kVAR Calculator</title>
     <link rel="icon" href="ce.svg"image/x-icon">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
@@ -167,7 +185,7 @@
         <div id="page5" style="display: none;">
             
             <h2>Input Monthly Bill Data (Ontario)</h2>
-            <div style="display: flex; flex-direction: column; align-items: center;">
+            <div style="display: flex; flex-direction: column; margin-left: 100px; align-items: center;">
                 <table style="width: 80%;">
                     <tr>
                         <th style="width: 8%;">Month</th>
@@ -176,7 +194,7 @@
                         <th style="width: 6%;">Desired PF (%)</th>
                         <th style="width: 6%;">Adjusted Consumption (kWH)</th>
                         <th style="width: 2%;">Consumption Charge (k$)</th>
-                        <th style="width: 8%;">Global Adjustment Charge (k$)</th>
+                        <th style="width: 8%;">Global Adjustment Charge (k$) *</th>
                         <th style="width: 8%;">Delivery Variable Charge (k$)</th>
                         <th style="width: 8%;">Regulatory Variable Charge (k$)</th>
                     </tr>
@@ -317,26 +335,31 @@
                         <td><input type="number" id="decemberDeliveryCharge"  style="width: 100px;"></td>
                         <td><input type="number" id="decemberRegulatoryCharge" style="width: 100px;"></td>
                     </tr>
+                </table> 
+                <div id="sumsContainer">
+                    <div id="sums">
+                        <p id="sumsurchargeSavings"></p>
+                        <p id="sumKwSavings"></p>
+                        <p id="sumKwhSavings"></p>
+                        <p id="sumGASavings"></p>
+                        <p id="sumRegSavings"></p>
+                        <p id="totalSavings"></p>
+                        
+                    </div>
+                </div>   
+                <p class="note" >* Global Adjustment Saving is calculated assuming there is no curtailment during peak hours. </p>
 
-                </table>    
-                <div id="sums">
-                    <p id="sumsurchargeSavings" style="margin-bottom: 1px; font-family: Arial, sans-serif; font-size: 18px; color: #0077b6"></p>
-                    <p id="sumKwSavings" style="margin-bottom: 1px; font-family: Arial, sans-serif; font-size: 18px; color: #0077b6"></p>
-                    <p id="sumKwhSavings" style="margin-bottom: 1px; font-family: Montserrat, sans-serif; font-size: 18px; color: #0077b6"></p>
-                    <p id="sumGASavings" style="margin-bottom: 1px; font-family: Montserrat, sans-serif; font-size: 18px; color: #0077b6"></p>
-                    <p id="sumRegSavings" style="margin-bottom: 5px; font-family: Montserrat, sans-serif; font-size: 18px; color: #0077b6"></p>
-                    <p id="totalSavings" style="margin-bottom: 5px; font-family: Montserrat, sans-serif; font-size: 22px; color: #fc0000"></p>
-                </div>          
                 <div id="buttonContainer" style="display: flex; justify-content: space-between; margin-top: 20px;">
                     <button id="backButton4">Back</button>
                     <button id="clearButton">Clear Inputs</button>
                     <button id="showsaving">Show Savings!</button>
                     <button id="startagain">Start Again</button>
-                    <button id="sendinfo">Send Your Information to Our Exprets</button>
+                    <!-- <button id="sendinfo">Send Your Information to Our Exprets</button> -->
                 </div>               
                     
             </div>
             <canvas id="myChart" width="10" height="4"></canvas>
+        </div>
     </div>
 
     <script src="script.js"></script>
