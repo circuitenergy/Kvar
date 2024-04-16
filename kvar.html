@@ -1,0 +1,344 @@
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-image: url('ce.svg'); 
+        background-size: 60%; /* Adjust size: 'cover' will cover the entire body */
+        background-position: center bottom 10%; /* Adjust position: 'center top' centers it horizontally and aligns it to the top */
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-color: rgba(255, 255, 255, 0.6); /* 40% transparent white background */
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+    .result-line {
+        /* font-size: 24px; */
+        font-weight: bold;
+        font-family: "Lato, Open Sans, Roboto, Helvetica Neue, Arial, sans-serif";
+        color: #0077b6; 
+        margin: 10px 0;
+        }
+
+        .cf-input {
+            display: inline-block;
+            margin-right: 20px;
+        }
+    .result2-line {
+        /* font-size: 24px; */
+        font-weight: bold;
+        font-family: "Lato, Open Sans, Roboto, Helvetica Neue, Arial, sans-serif";
+        color: #ff0000;
+        /* margin-top: 5px; */
+        padding: 10px;
+    }
+    #container {
+        display: inline-block;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #edf5fec2;
+        border-radius: 40px;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+        min-width: 500px; /* Set your desired minimum width */
+        min-height: 200px; /* Set your desired minimum height */
+    }
+
+    h1 {
+        color: #333;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    .input-group label {
+        display: block;
+        font-size: 18px;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 18px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 10px;
+    }
+
+    button:hover {
+        background-color: #555;
+    }
+</style>
+<link href="https://fonts.googleapis.com/css?family=Proza+Sans&display=swap" rel="stylesheet">
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kVAR Calculator</title>
+    <link rel="icon" href="ce.svg"image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+    <div id="container">
+        <div id="page1">
+            <h1>Welcome to the Circuit Energy Power Conditioning Calculator</h1>
+            <button id="startButton">Start</button>
+        </div>
+        <div id="page2" style="display: none;">
+            <h2>Enter Your Plant Information</h2>
+            <div class="input-group cf-input">
+                <label for="pf">Current Power Factor (%):</label>
+                <input type="number" id="pf" placeholder="Current Power Factor (%)" style="font-size: 12px;">
+            </div>
+            <div class="input-group cf-input">
+                <label for="pfd">Desired Power Factor (%):</label>
+                <input type="number" id="pfd" placeholder="Desired Power Factor (%)" style="font-size: 12px;" >
+            </div>
+            <div class="input-group">
+                <label for="voltage">Voltage level:</label>
+                <select id="voltage">
+                    <option value="480">480 V</option>
+                    <option value="600">600 V</option>
+                </select>
+            </div>
+            <div style="margin-top: 20px;"></div>
+
+            <div class="input-group">
+                <label for="selectedOption">Consumption:</label>
+                <select id="selectedOption">
+                    <option value="demand">Total Demand (KW)</option>
+                    <option value="current">Total Current (A) </option>
+                </select>
+            </div>
+            <div class="input-group">
+                <input type="number" id="p" placeholder="Total Consumption" >
+            </div>
+            <button id="backButton1">Back</button>
+            <button id="calculateButton">Next</button>
+        </div>
+        <div id="page3" style="display: none;">
+            <h2>Calculation Result</h2>
+            <p id="resultQ" class="result-line"> </p>
+            <p id="resultS" class="result-line"> </p>
+            <p id="resultC" class="result-line"> </p> 
+            <div id="visual"></div>
+            <button id="backButton2">Back</button>
+            <button id="harmonicButton">How about Harmonics!</button>
+        </div>
+        <div id="page4" style="display: none; padding: 20px; background-color: #f7f7f7; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+            <h2 style="font-family: 'Arial', sans-serif; color: #333;">Select Reactor Type</h2>
+            <div style="text-align: left;">
+                <div style="margin: 10px 0;">
+                    <input type="radio" id="reactor1" name="reactor" value="14%" style="margin-right: 10px;">
+                    <label for="reactor3" style="font-family: 'Arial', sans-serif; font-size: 16px; color: #444;">Detuned Order n = 2.7</label>
+                    <span style="margin-left: 8px; font-family: 'Arial', sans-serif; font-size: 14px; color: #666;">(If you have more of triplen harmonics)</span>
+                </div>
+                <div style="margin: 10px 0;">
+                    <input type="radio" id="reactor2" name="reactor" value="7%" style="margin-right: 10px;">
+                    <label for="reactor2" style="font-family: 'Arial', sans-serif; font-size: 16px; color: #444;">Detuned Order n = 3.8</label>
+                    <span style="margin-left: 8px; font-family: 'Arial', sans-serif; font-size: 14px; color: #666;">(If you have VFD)</span>
+                </div>
+                <div style="margin: 10px 0;">
+                    <input type="radio" id="reactor3" name="reactor" value="5.67%" style="margin-right: 10px;" checked>
+                    <label for="reactor1" style="font-family: 'Arial', sans-serif; font-size: 16px; color: #444;">Detuned Order n = 4.2</label>
+                    <span style="margin-left: 8px; font-family: 'Arial', sans-serif; font-size: 14px; color: #666;">(If you have VFD, also highly recommended for avoiding resonance)</span>
+                </div>
+            </div>
+        
+            <button id="backButton3">Back</button>
+            <button id="detailsButton">Input Details</button>
+        </div> 
+        <div id="page5" style="display: none;">
+            
+            <h2>Input Monthly Bill Data (Ontario)</h2>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <table style="width: 80%;">
+                    <tr>
+                        <th style="width: 8%;">Month</th>
+                        <th style="width: 6%;">Demand (kW)</th>
+                        <th style="width: 6%;">Existing PF (%)</th>
+                        <th style="width: 6%;">Desired PF (%)</th>
+                        <th style="width: 6%;">Adjusted Consumption (kWH)</th>
+                        <th style="width: 2%;">Consumption Charge (k$)</th>
+                        <th style="width: 8%;">Global Adjustment Charge (k$)</th>
+                        <th style="width: 8%;">Delivery Variable Charge (k$)</th>
+                        <th style="width: 8%;">Regulatory Variable Charge (k$)</th>
+                    </tr>
+                    <tr>
+                        <td>January</td>
+                        <td><input type="number" id="januaryKW" style="width: 100px;"></td>
+                        <td><input type="number" id="januaryPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="januaryPFD" style="width: 100px;"></td>
+                        <td><input type="number" id="januaryKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="januaryKWHCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="januaryGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="januaryDeliveryCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="januaryRegulatoryCharge" style="width: 100px;"></td>
+                        <td>
+                            <button class="copyButton smallButton" data-month="january">
+                                <span style="width: 110px; height: 42px;font-size: 12px; display: inline-block; vertical-align: middle;">Too Hard to Enter All Months Data? OK! Copy to All</span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>February</td>
+                        <td><input type="number" id="februaryKW" style="width: 100px;"></td>
+                        <td><input type="number" id="februaryPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="februaryPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="februaryKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="februaryKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="februaryGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="februaryDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="februaryRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>March</td>
+                        <td><input type="number" id="marchKW" style="width: 100px;"></td>
+                        <td><input type="number" id="marchPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="marchPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="marchKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="marchKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="marchGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="marchDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="marchRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>April</td>
+                        <td><input type="number" id="aprilKW" style="width: 100px;"></td>
+                        <td><input type="number" id="aprilPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="aprilPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="aprilKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="aprilKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="aprilGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="aprilDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="aprilRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>May</td>
+                        <td><input type="number" id="mayKW" style="width: 100px;"></td>
+                        <td><input type="number" id="mayPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="mayPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="mayKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="mayKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="mayGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="mayDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="mayRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>June</td>
+                        <td><input type="number" id="juneKW" style="width: 100px;"></td>
+                        <td><input type="number" id="junePF"  style="width: 100px;"></td>
+                        <td><input type="number" id="junePFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="juneKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="juneKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="juneGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="juneDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="juneRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>July</td>
+                        <td><input type="number" id="julyKW" style="width: 100px;"></td>
+                        <td><input type="number" id="julyPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="julyPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="julyKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="julyKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="julyGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="julyDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="julyRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>August</td>
+                        <td><input type="number" id="augustKW" style="width: 100px;"></td>
+                        <td><input type="number" id="augustPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="augustPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="augustKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="augustKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="augustGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="augustDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="augustRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>September</td>
+                        <td><input type="number" id="septemberKW" style="width: 100px;"></td>
+                        <td><input type="number" id="septemberPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="septemberPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="septemberKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="septemberKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="septemberGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="septemberDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="septemberRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>October</td>
+                        <td><input type="number" id="octoberKW" style="width: 100px;"></td>
+                        <td><input type="number" id="octoberPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="octoberPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="octoberKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="octoberKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="octoberGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="octoberDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="octoberRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>November</td>
+                        <td><input type="number" id="novemberKW" style="width: 100px;"></td>
+                        <td><input type="number" id="novemberPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="novemberPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="novemberKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="novemberKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="novemberGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="novemberDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="novemberRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+                    <tr>
+                        <td>December</td>
+                        <td><input type="number" id="decemberKW" style="width: 100px;"></td>
+                        <td><input type="number" id="decemberPF"  style="width: 100px;"></td>
+                        <td><input type="number" id="decemberPFD"  style="width: 100px;"></td>
+                        <td><input type="number" id="decemberKWH" style="width: 100px;"> </td>
+                        <td><input type="number" id="decemberKWHCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="decemberGlobalAdjCharge" style="width: 100px;"></td>
+                        <td><input type="number" id="decemberDeliveryCharge"  style="width: 100px;"></td>
+                        <td><input type="number" id="decemberRegulatoryCharge" style="width: 100px;"></td>
+                    </tr>
+
+                </table>    
+                <div id="sums">
+                    <p id="sumsurchargeSavings" style="margin-bottom: 1px; font-family: Arial, sans-serif; font-size: 18px; color: #0077b6"></p>
+                    <p id="sumKwSavings" style="margin-bottom: 1px; font-family: Arial, sans-serif; font-size: 18px; color: #0077b6"></p>
+                    <p id="sumKwhSavings" style="margin-bottom: 1px; font-family: Montserrat, sans-serif; font-size: 18px; color: #0077b6"></p>
+                    <p id="sumGASavings" style="margin-bottom: 1px; font-family: Montserrat, sans-serif; font-size: 18px; color: #0077b6"></p>
+                    <p id="sumRegSavings" style="margin-bottom: 5px; font-family: Montserrat, sans-serif; font-size: 18px; color: #0077b6"></p>
+                    <p id="totalSavings" style="margin-bottom: 5px; font-family: Montserrat, sans-serif; font-size: 22px; color: #fc0000"></p>
+                </div>          
+                <div id="buttonContainer" style="display: flex; justify-content: space-between; margin-top: 20px;">
+                    <button id="backButton4">Back</button>
+                    <button id="clearButton">Clear Inputs</button>
+                    <button id="showsaving">Show Savings!</button>
+                    <button id="startagain">Start Again</button>
+                    <button id="sendinfo">Send Your Information to Our Exprets</button>
+                </div>               
+                    
+            </div>
+            <canvas id="myChart" width="10" height="4"></canvas>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
