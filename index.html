@@ -92,6 +92,7 @@
         border-radius: 5px;
         cursor: pointer;
         margin: 10px;
+        
     }
 
     button:hover {
@@ -129,7 +130,7 @@
                 <input type="number" id="pfd" placeholder="Desired Power Factor (%)" style="font-size: 12px;" >
             </div>
             <div class="input-group">
-                <label for="voltage">Voltage Level:</label>
+                <label for="voltage">Voltage level:</label>
                 <select id="voltage">
                     <option value="480">480 V</option>
                     <option value="600">600 V</option>
@@ -348,15 +349,13 @@
                     </div>
                 </div>   
                 <p class="note" >* Global Adjustment Saving is calculated assuming there is no curtailment during peak hours. </p>
-
+                <button id="showsaving">Show Savings!</button>
                 <div id="buttonContainer" style="display: flex; justify-content: space-between; margin-top: 20px;">
                     <button id="backButton4">Back</button>
                     <button id="clearButton">Clear Inputs</button>
-                    <button id="showsaving">Show Savings!</button>
                     <button id="startagain">Start Again</button>
-                    <!-- <button id="sendinfo">Send Your Information to Our Exprets</button> -->
+                    <button onclick="window.open('https://5149836.hs-sites.com/circuit-energy-power-conditioning?utm_campaign=Power%20Conditioning&utm_source=hs_email&utm_medium=email&_hsenc=p2ANqtz-8c3bnNCAvime6WxNf1wuZTb0QYBrV8BJNRwov6pagwD1cwoUjEBnSGWryIA6EkPcqU1x3d', '_blank')">Let's Discuss More!</button>
                 </div>               
-                    
             </div>
             <canvas id="myChart" width="10" height="4"></canvas>
         </div>
