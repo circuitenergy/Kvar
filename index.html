@@ -138,15 +138,17 @@
             </div>
             <div style="margin-top: 20px;"></div>
 
-            <div class="input-group">
+            <!-- <div class="input-group">
                 <label for="selectedOption">Peak Demand:</label>
                 <select id="selectedOption">
                     <option value="demand">Total Demand (KW)</option>
                     <option value="current">Total Current (A) </option>
                 </select>
-            </div>
+            </div> -->
+
             <div class="input-group">
-                <input type="number" id="p" placeholder="Total Demand" >
+                <label for="p">Total Peak Demand (kW):</label>
+                <input type="number" id="p" placeholder="Total Peak Demand (kW)" style="width: 250px;" >
             </div>
             <button id="backButton1">Back</button>
             <button id="calculateButton">Next</button>
