@@ -12,17 +12,17 @@
         text-align: center;
     }
     .result-line {
-        /* font-size: 24px; */
         font-weight: bold;
         font-family: "Lato, Open Sans, Roboto, Helvetica Neue, Arial, sans-serif";
         color: #0077b6; 
         margin: 10px 0;
         }
 
-        .cf-input {
-            display: inline-block;
-            margin-right: 20px;
-        }
+    .cf-input {
+        display: inline-block;
+        margin-right: 20px;
+    }
+    
     #sumsContainer {
         display: block;
         background-color: rgba(249, 249, 249, 0);
@@ -39,6 +39,7 @@
         color: #0077b6;
         text-align: justify; /* Align lines */
     }
+
     .note {
     font-style: italic;
     font-size: 14px !important;
@@ -60,6 +61,7 @@
         min-width: 500px; /* Set your desired minimum width */
         min-height: 200px; /* Set your desired minimum height */
     }
+
     h1 {
         color: #333;
     }
@@ -92,7 +94,6 @@
         border-radius: 5px;
         cursor: pointer;
         margin: 10px;
-        
     }
 
     button:hover {
@@ -143,10 +144,8 @@
     .tooltip-icon:hover {
         background-color: #0056b3; /* Adjust the hover color of the icon circle */
     }
-
 </style>
 <link href="https://fonts.googleapis.com/css?family=Proza+Sans&display=swap" rel="stylesheet">
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -157,7 +156,6 @@
     <link rel="icon" href="ce.svg"image/x-icon">
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
 <body>
     <div style="margin-top: 20px;"></div>
@@ -184,7 +182,6 @@
                 </select>
             </div>
             <div style="margin-top: 20px;"></div>
-
             <!-- <div class="input-group">
                 <label for="selectedOption">Peak Demand:</label>
                 <select id="selectedOption">
@@ -192,7 +189,6 @@
                     <option value="current">Total Current (A) </option>
                 </select>
             </div> -->
-
             <div class="input-group">
                 <label for="p">Total Peak Demand (kW):</label>
                 <input type="number" id="p" placeholder="Total Peak Demand (kW)" style="width: 250px;" >
@@ -228,12 +224,10 @@
                     <span style="margin-left: 8px; font-family: 'Arial', sans-serif; font-size: 14px; color: #666;">(If you have VFD, also highly recommended for avoiding resonance)</span>
                 </div>
             </div>
-        
             <button id="backButton3">Back</button>
             <button id="detailsButton">Input Details</button>
         </div> 
         <div id="page5" style="display: none;">
-            
             <h2>Input Monthly Bill Data (Ontario)</h2>
             <div style="margin-top: 40px;"></div>
             <div style="display: flex; flex-direction: column; margin-left: 100px; align-items: center;">
@@ -254,15 +248,6 @@
                             Regulatory Variable Charge ($)<span class="tooltip-icon">?</span>
                             <div class="tooltip-content">In Some Bills Shown as Whole Sale Market Service Charge</div>
                         </th>
-                        <!-- <th style="width: 8%;">Month</th>
-                        <th style="width: 6%;" class="tooltip" data-tooltip="Monthly Peak Demand (kW)">Demand (kW)</th>
-                        <th style="width: 6%;" class="tooltip" data-tooltip="Existing Power Factor in Percentage">Existing PF (%)</th>
-                        <th style="width: 6%;" class="tooltip" data-tooltip="Desired Power Factor in Percentage">Desired PF (%)</th>
-                        <th style="width: 6%;">Adjusted Consumption (kWH)</th>
-                        <th style="width: 2%;" class="tooltip" data-tooltip="Adjusted Consumption Charge in $ Considering Adjustment Factor">Consumption Charge ($)</th>
-                        <th style="width: 8%;" class="tooltip" data-tooltip="Global Adjustment Charge in $">Global Adjustment Charge ($) *</th>
-                        <th style="width: 8%;" class="tooltip" data-tooltip="In Some Bills Shown as Transmission and Distribution Charge ">Delivery Variable Charge ($)</th>
-                        <th style="width: 8%;" class="tooltip" data-tooltip="In Some Bills Shown as Whole Sale Market Service Charge">Regulatory Variable Charge ($)</th> -->
                     </tr>
                     <tr>
                         <td>January</td>
@@ -410,7 +395,6 @@
                         <p id="sumGASavings"></p>
                         <p id="sumRegSavings"></p>
                         <p id="totalSavings"></p>
-                        
                     </div>
                 </div>   
                 <p class="note" >* Global Adjustment Saving is calculated assuming there is no curtailment during peak hours. </p>
@@ -423,9 +407,9 @@
                 </div>               
             </div>
             <canvas id="myChart" width="10" height="4"></canvas>
+            <p class="note" >Disclaimer: The results are preliminary and might be subject to change based on different situations and facility electrical configuration. </p>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
