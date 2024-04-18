@@ -98,6 +98,29 @@
     button:hover {
         background-color: #555;
     }
+    .tooltip {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .tooltip::before {
+        content: attr(data-tooltip);
+        position: absolute;
+        top: -50px; /* Adjust as needed */
+        right: 0px; /* Adjust to place the tooltip on the top right corner */
+        background-color: rgba(85, 85, 85, 0.8); /* Adjust the alpha value (0.8) for transparency */
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        width: 150px; /* Fix the width of the tooltip box */
+        text-align: center;
+    }
+
+    .tooltip:hover::before {
+        opacity: 1;
+    }
 </style>
 <link href="https://fonts.googleapis.com/css?family=Proza+Sans&display=swap" rel="stylesheet">
 
@@ -192,14 +215,14 @@
                 <table style="width: 80%;">
                     <tr>
                         <th style="width: 8%;">Month</th>
-                        <th style="width: 6%;">Demand (kW)</th>
-                        <th style="width: 6%;">Existing PF (%)</th>
-                        <th style="width: 6%;">Desired PF (%)</th>
+                        <th style="width: 6%;" class="tooltip" data-tooltip="Monthly Peak Demand (kW)">Demand (kW)</th>
+                        <th style="width: 6%;" class="tooltip" data-tooltip="Existing Power Factor in Percentage">Existing PF (%)</th>
+                        <th style="width: 6%;" class="tooltip" data-tooltip="Desired Power Factor in Percentage">Desired PF (%)</th>
                         <!-- <th style="width: 6%;">Adjusted Consumption (kWH)</th> -->
-                        <th style="width: 2%;">Consumption Charge ($k)</th>
-                        <th style="width: 8%;">Global Adjustment Charge ($k) *</th>
-                        <th style="width: 8%;">Delivery Variable Charge ($k)</th>
-                        <th style="width: 8%;">Regulatory Variable Charge ($k)</th>
+                        <th style="width: 2%;" class="tooltip" data-tooltip="Adjusted Consumption Charge in $k Considering Adjustment Factor">Consumption Charge (k$)</th>
+                        <th style="width: 8%;" class="tooltip" data-tooltip="Global Adjustment Charge in $k">Global Adjustment Charge (k$) *</th>
+                        <th style="width: 8%;" class="tooltip" data-tooltip="In Some Bills Shown as Transmission and Distribution Charge ">Delivery Variable Charge (k$)</th>
+                        <th style="width: 8%;" class="tooltip" data-tooltip="In Some Bills Shown as Whole Sale Market Service Charge">Regulatory Variable Charge (k$)</th>
                     </tr>
                     <tr>
                         <td>January</td>
