@@ -1,0 +1,145 @@
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('ce.svg'); 
+    background-size: 60%; /* Adjust size: 'cover' will cover the entire body */
+    background-position: center bottom 10%; /* Adjust position: 'center top' centers it horizontally and aligns it to the top */
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: rgba(255, 255, 255, 0.6); /* 40% transparent white background */
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+.result-line {
+    font-weight: bold;
+    font-family: "Lato, Open Sans, Roboto, Helvetica Neue, Arial, sans-serif";
+    color: #0077b6; 
+    margin: 10px 0;
+    }
+
+.cf-input {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+#sumsContainer {
+    display: block;
+    background-color: rgba(249, 249, 249, 0);
+    padding: 20px;
+    margin-top: 20px;
+    /* border: 2px solid #ccc; */
+    border-radius: 20px;
+}
+
+#sumsContainer p {
+    margin-bottom: 5px;
+    font-family: Montserrat, sans-serif;
+    font-size: 18px;
+    color: #0077b6;
+    text-align: justify; /* Align lines */
+}
+
+.note {
+font-style: italic;
+font-size: 14px !important;
+color: #555 !important;
+}
+
+#sumsContainer #totalSavings {
+    font-size: 22px;
+    color: #fc0000;
+}
+
+#container {
+    display: inline-block;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #edf5fec2;
+    border-radius: 40px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    min-width: 500px; /* Set your desired minimum width */
+    min-height: 200px; /* Set your desired minimum height */
+}
+
+h1 {
+    color: #333;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+button:hover {
+    background-color: #555;
+}
+.tooltip {
+    position: relative;
+    cursor: default; /* Change cursor to default since no action needed on hover */
+}
+
+.tooltip-content {
+    display: none; /* Initially hide the tooltip content */
+    position: absolute;
+    top: -30px; /* Adjust as needed */
+    right: 0; /* Adjust to place the tooltip on the top right corner */
+    left: calc(100% + 10px);
+    background-color: rgba(0, 0, 0, 0.7); /* Adjust the alpha value (0.8) for transparency */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    width: 250px; /* Fix the width of the tooltip box */
+    text-align: center; /* Center-align the text within the tooltip box */
+    z-index: 1; /* Ensure tooltip content appears above other elements */
+}
+
+.tooltip-icon.clicked + .tooltip-content {
+    display: block; /* Show tooltip content when the icon has the 'clicked' class */
+}
+
+.tooltip-icon {
+    position: absolute; 
+    top: 37%;
+    right: 0;
+    width: 15px;
+    height: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid #000000; /* Add border to the icon */
+    background-color: #ffffff00; /* Adjust the color of the icon circle */
+    color: rgb(0, 0, 0);
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.tooltip-icon:hover {
+    background-color: #0056b3; /* Adjust the hover color of the icon circle */
+}
